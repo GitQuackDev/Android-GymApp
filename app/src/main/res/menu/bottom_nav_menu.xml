@@ -1,0 +1,28 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/navigation_workouts"
+        android:icon="@drawable/ic_workouts" 
+        android:title="Workouts"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_meals"
+        android:icon="@drawable/ic_meals"
+        android:title="Meals"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_progress"
+        android:icon="@drawable/ic_progress"
+        android:title="Progress"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_user"
+        android:title="Profile"
+        app:showAsAction="ifRoom" />
+
+</menu>

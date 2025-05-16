@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginBottom="4dp"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvProgressItemType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:textColor="?attr/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivProgressItemMenu"
+            android:layout_marginEnd="8dp"
+            tools:text="Body Weight" />
+
+        <TextView
+            android:id="@+id/tvProgressItemValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:textSize="18sp"
+            app:layout_constraintTop_toBottomOf="@id/tvProgressItemType"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="75.5 kg" />
+
+        <TextView
+            android:id="@+id/tvProgressItemDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceCaption"
+            android:textColor="?android:attr/textColorSecondary"
+            app:layout_constraintTop_toTopOf="@id/tvProgressItemValue"
+            app:layout_constraintBottom_toBottomOf="@id/tvProgressItemValue"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="May 09, 2025" />
+            
+        <TextView
+            android:id="@+id/tvProgressItemNotes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:visibility="gone" 
+            tools:visibility="visible"
+            tools:text="Feeling good today, slight increase from last week due to vacation."
+            app:layout_constraintTop_toBottomOf="@id/tvProgressItemValue"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/ivProgressItemMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_more_vert" 
+            app:tint="?attr/colorControlNormal"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/more_options" 
+            app:layout_constraintTop_toTopOf="@id/tvProgressItemType"
+            app:layout_constraintBottom_toBottomOf="@id/tvProgressItemType"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

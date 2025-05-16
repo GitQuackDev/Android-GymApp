@@ -1,0 +1,251 @@
+<resources>
+    <string name="app_name">AimingFitness</string>
+    
+    <!-- Authentication Strings -->
+    <string name="login">Sign In</string>
+    <string name="register">Create Account</string>
+    <string name="email">Email address</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="username">Username</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="or_sign_in_with">Or sign in with</string>
+    <string name="already_have_account">Already have an account? Sign in</string>
+    <string name="dont_have_account">Don\'t have an account? Create one</string>
+    <string name="password_min_length">Password must be at least 8 characters</string>
+    <string name="back_to_login">Back to login</string>
+    <string name="reset_password_description">Enter your email address and we\'ll send you a link to reset your password</string>
+    <string name="send_reset_link">Send Reset Link</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="create_account">Create Account</string>
+    <string name="forgot_password_title">Forgot Password?</string>
+    <string name="login_subtitle">Sign in to continue to your fitness journey</string>
+    <string name="register_subtitle">Create your account and start your fitness journey</string>
+    <string name="phone_number">Phone number</string>
+    <string name="invalid_email">Please enter a valid email address</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
+
+    <string name="username_required">Username is required</string>
+    <string name="email_required">Email is required</string>
+    <string name="password_required">Password is required</string>
+    <string name="confirm_password_required">Please confirm your password</string>
+    <string name="registration_succeeded_profile_updated">Registration successful. Profile updated.</string>
+    <string name="registration_succeeded_profile_update_failed">Registration successful. Profile update failed.</string>
+    <string name="registration_succeeded_user_null">Registration successful, but user data is currently unavailable. Please try logging in.</string>
+    <string name="registration_failed">Registration failed: %s</string>
+    <string name="google_sign_in_failed_status_msg">Google sign in failed: %d %s</string>
+    <string name="google_registration_success_user">Google Registration Success: %s</string>
+    <string name="google_sign_in_success_user">Google Sign In Success: %s</string>
+    <string name="unknown_user">Unknown user</string>
+    <string name="firebase_auth_failed_msg">Firebase Authentication Failed: %s</string>
+
+    <!-- Progress Tracking Strings -->
+    <string name="add_progress_entry_fab_description">Add new progress entry</string>
+    <string name="add_progress_title">Log New Progress</string>
+    <string name="date">Date</string>
+    <string name="progress_type">Type of Progress</string>
+    <string name="weight_value">Weight</string>
+    <string name="unit">Unit</string>
+    <string name="exercise_name">Exercise Name</string>
+    <string name="weight_lifted">Weight Lifted</string>
+    <string name="sets">Sets</string>
+    <string name="reps">Reps</string>
+    <string name="measurement_area">Measurement Area (e.g., Chest, Waist)</string>
+    <string name="measurement_value">Value</string>
+    <string name="notes_optional">Notes (Optional)</string>
+    <string name="save_progress">Save Progress</string>
+    <string name="cancel">Cancel</string>
+    <string name="progress_type_weight">Body Weight</string>
+    <string name="progress_type_workout">Workout Log</string>
+    <string name="progress_type_measurement">Body Measurement</string>
+    <string name="select_progress_type_prompt">Select progress type</string>
+
+    <!-- New MyFitnessPal-style UI Strings -->
+    <string name="logging_progress">Logging Progress</string>
+    <string name="powering_up">Powering up</string>
+    <string name="nutrition_title">Nutrition</string> <!-- Added -->
+    <string name="meals_title">Meals</string>
+    <string name="macros_title">Macros</string>
+    <string name="steps_title">Steps</string>
+    <string name="exercise_title">Exercise</string>
+    <string name="notes_title">Notes</string> <!-- Added -->
+    <string name="calories">Calories</string>
+    <string name="calories_label">Calories</string>
+    <string name="carbs">Carbohydrates</string>
+    <string name="carbs_label">Carbs</string>
+    <string name="protein_label">Protein</string>
+    <string name="fat_label">Fat</string>
+    <string name="protein">Protein</string>
+    <string name="fat">Fat</string>
+    <string name="steps">Steps</string>
+    <string name="steps_goal">Goal</string>
+    <string name="goal_reached">Goal reached!</string>
+    <string name="exercise_duration">Duration</string>
+    <string name="exercise_calories">Calories burned</string>
+    <string name="save_daily_progress">Save Daily Progress</string>
+
+    <!-- Hints with units for progress logging -->
+    <string name="calories_hint_kcal">Calories (kcal)</string>
+    <string name="carbs_hint_g">Carbohydrates (g)</string>
+    <string name="protein_hint_g">Protein (g)</string>
+    <string name="fat_hint_g">Fat (g)</string>
+    <string name="steps_hint_count">Steps taken</string>
+    <string name="steps_goal_hint_count">Daily steps goal</string>
+    <string name="exercise_duration_hint_minutes">Duration (minutes)</string> <!-- Will be replaced -->
+    <string name="exercise_calories_hint_kcal">Calories Burned (kcal)</string> <!-- Will be replaced -->
+    <string name="exercise_name_hint">Exercise name</string>
+    <string name="notes_optional_hint">Notes (e.g., how you felt, any PRs)</string>
+
+    <!-- Button Texts -->
+    <string name="add_food_button_text">Add Food</string>
+    <string name="add_exercise_button_text">Add Exercise</string>
+
+    <!-- Strings for Progress Display -->
+    <string name="no_progress_entries">No progress entries found for this day. Tap the + button to add one!</string>
+    <string name="more_options">More options</string>
+    <string name="nutrition">Nutrition</string>
+    <string name="exercise">Exercise</string>
+    <string name="notes">Notes</string>
+
+    <!-- New/Updated Strings for Simplified Daily Progress Logging -->
+    <string name="food_notes_summary_hint">General food notes (e.g., meals eaten)</string>
+    <string name="weight_logging_title">Weight</string>
+    <string name="current_weight_hint">Current Weight (e.g., 70.5)</string>
+    <string name="total_activity_time_hint">Total activity time (minutes)</string>
+    <string name="total_activity_calories_hint">Total activity calories burned (kcal)</string>
+    <string name="weight_unit_kg">kg</string>
+    <string name="weight_unit_lbs">lbs</string>
+
+    <string-array name="progress_types">
+        <item>@string/progress_type_weight</item>
+        <item>@string/progress_type_workout</item>
+        <item>@string/progress_type_measurement</item>
+    </string-array>
+
+    <string-array name="weight_units">
+        <item>kg</item>
+        <item>lbs</item>
+    </string-array>
+
+    <string-array name="measurement_units">
+        <item>cm</item>
+        <item>inches</item>
+    </string-array>
+
+    <!-- Empty State Messages -->
+    <!-- <string name="no_progress_entries">No Progress Yet</string> -->
+    <string name="add_progress_to_get_started">Tap the + button to add your first entry!</string>
+    <string name="no_workouts_found">No Workouts Yet</string>
+    <string name="add_workout_to_get_started">Tap the + button to add your first workout!</string>
+    <string name="no_meals_found">No Meals Logged Yet</string>
+    <string name="add_meal_to_get_started">Tap the + button to log your first meal!</string>
+
+    <!-- FAB Content Descriptions -->
+    <string name="add_workout_fab_description">Add new workout</string>
+    <string name="add_meal_fab_description">Add new meal</string>
+    <string name="add_progress_entry">Add progress entry</string>
+
+    <!-- Image Descriptions -->
+    <string name="workout_image_description">Workout image</string>
+    <string name="meal_image_description">Image of the meal</string>
+
+    <!-- Workout Strings -->
+    <string name="add_workout_title">Add New Workout</string>
+    <string name="edit_workout_title">Edit Workout</string>
+    <string name="workout_name_hint">Workout Name</string>
+    <string name="workout_description_hint">Description (Optional)</string>
+    <string name="workout_type_hint">Workout Type (e.g., Strength, Cardio)</string>
+    <string name="workout_duration_hint">Duration (e.g., 30 mins, 1 hour)</string>
+    <string name="workout_difficulty_hint">Difficulty (e.g., Beginner, Intermediate)</string>
+    <string name="workout_muscle_groups_hint">Muscle Groups (e.g., Chest, Back, Legs)</string>
+    <string name="workout_exercises_hint">Exercises (e.g., Bench Press, Squats)</string>
+    <string name="save_workout">Save Workout</string>
+    <string name="add_exercise_to_plan_button_text">Add Exercise to Plan</string> <!-- Added -->
+    <string name="remove_exercise_desc">Remove this exercise from the plan</string> <!-- Added -->
+    <string name="exercise_name_label">Exercise Name</string> <!-- Added -->
+    <string name="sets_label">Sets</string> <!-- Added -->
+    <string name="reps_label">Reps</string> <!-- Added -->
+    <string name="weight_label">Weight</string> <!-- Added -->
+    <string name="rest_time_label">Rest Time (seconds)</string> <!-- Added -->
+    <string name="notes_label">Notes (Optional)</string> <!-- Added -->
+
+    <!-- Strings for DailyProgressAdapter -->
+    <string name="no_date">Date not available</string>
+    <string name="cal_unit">kcal</string>
+    <string name="no_calories_recorded">Calories not recorded</string>
+    <string name="goal_label">Goal</string>
+    <string name="no_goal_set">Goal not set</string>
+    <string name="no_steps_recorded">Steps not recorded</string>
+
+    <!-- Missing strings from previous turn -->
+    <string name="theme_toggle_description">Toggle theme</string>
+    <string name="add_exercise_detail_title">Add Exercise Details</string>
+    <string name="warm_up_set_label">Warm-up Set?</string>
+    <string name="save_exercise_detail_button_text">Add to Workout</string>
+    <string name="warm_up_set_helper">Warm-up sets typically use lighter weight and are not counted towards your working sets.</string>
+    <string name="edit_exercise_detail_title">Edit Exercise</string>
+    <string name="rest_timer_helper">Rest time between sets (seconds)</string>
+    <string name="reps_helper_text">Number of repetitions (e.g., 10, 8-12, AMRAP)</string>
+    <string name="weight_helper_text">Amount of weight (e.g., 135 lbs, Bodyweight)</string>
+    <string name="move_exercise_up">Move exercise up</string>
+    <string name="move_exercise_down">Move exercise down</string>
+    <string name="edit_exercise">Edit exercise</string>
+    <string name="sets_completed">%1$d/%2$d sets completed</string>
+    <string name="next_set">Next Set</string>
+    <string name="complete_workout">Complete Workout</string>
+    <string name="rest_timer_seconds">%1$d seconds</string>
+
+    <string-array name="workout_types">
+        <item>Strength</item>
+        <item>Cardio</item>
+        <item>Flexibility</item>
+        <item>Balance</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="workout_difficulty_levels">
+        <item>Beginner</item>
+        <item>Intermediate</item>
+        <item>Advanced</item>
+        <item>Expert</item>
+    </string-array>
+
+    <!-- Workout Session/Companion Strings -->
+    <string name="workout_stats">Workout Stats</string>
+    <string name="exercises">Exercises</string>
+    <string name="estimated_time">Est. Time</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="current_exercise">Current Exercise</string>
+    <string name="weight">Weight</string>
+    <string name="rest_time">Rest Time</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
+    <string name="skip">Skip</string>
+    <string name="complete_set">Complete Set</string>
+    <string name="exercise_status">Exercise status</string>
+    <string name="next_exercise">Next Exercise</string>
+    <string name="previous_exercise">Previous Exercise</string>
+    <string name="start_workout">Start Workout</string>
+    <string name="end_workout">End Workout</string>
+    <string name="workout_complete">Workout Complete!</string>
+    <string name="workout_complete_message">Congratulations! You\'ve completed your workout.</string>
+    <string name="view_summary">View Summary</string>
+    <string name="return_to_workouts">Return to Workouts</string>
+    <string name="great_work">Great work!</string>
+    <string name="workout_summary">Workout Summary</string>
+    <string name="exercises_label">Exercises</string>
+    <string name="sets_label_summary">Sets</string>
+    <string name="duration_label">Duration</string>
+    <string name="completed_exercises">Completed Exercises</string>
+    <string name="share_results">Share Results</string>
+    <string name="workout_history_saved">Workout history saved successfully!</string>
+    <string name="error_saving_workout_history">Error saving workout history.</string>
+    <string name="share_workout_title">Share Workout</string>
+    <string name="share_workout_subject">Check out my workout!</string>
+    <string name="no_exercises_found">No exercises found in this workout. Add some exercises first!</string>
+
+    <string name="label_warm_up_set">Warm-up Set</string>
+    <string name="label_normal_set">Set %1$d</string>
+</resources>

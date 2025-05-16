@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Light Mode Palette -->
+    <color name="primary">#FF6B6B</color> <!-- Energetic Red -->
+    <color name="secondary">#4ECDC4</color> <!-- Refreshing Teal -->
+    <color name="background">#F7FFF7</color> <!-- Soft White-Green -->
+    <color name="text_primary">#1A535C</color> <!-- Deep Navy-Teal -->
+    <color name="accent">#FFE66D</color> <!-- Energetic Yellow -->
+
+    <!-- Variants and other UI colors for Light Mode -->
+    <color name="primary_variant">#D35454</color> <!-- Darker Energetic Red -->
+    <color name="primary_light">#FF8C8C</color> <!-- Lighter Energetic Red -->
+    <color name="secondary_variant">#3EABA6</color> <!-- Darker Refreshing Teal -->
+    <color name="secondary_light">#70D8D1</color> <!-- Lighter Refreshing Teal -->
+    <color name="surface">#FFFFFF</color> <!-- Standard white for surfaces -->
+    <color name="text_secondary">#527F85</color> <!-- Lighter Deep Navy-Teal -->
+    <color name="text_hint">#7E9FA3</color> <!-- Even lighter for hints -->
+
+    <!-- Error and Success Colors -->
+    <color name="error">#DC2626</color>
+    <color name="error_light">#FECACA</color>
+    <color name="success">#16A34A</color>
+    
+    <!-- Explicit Dark Mode Color Definitions -->
+    <color name="dm_primary">#FF6B6B</color> <!-- Energetic Red (Dark Mode) -->
+    <color name="dm_secondary">#38B2AC</color> <!-- Cool Teal (Dark Mode) -->
+    <color name="dm_background">#1A202C</color> <!-- Dark Slate (Dark Mode) -->
+    <color name="dm_text_primary">#E2E8F0</color> <!-- Soft White (Dark Mode) -->
+    <color name="dm_accent">#ECC94B</color> <!-- Golden Yellow (Dark Mode) -->
+
+    <!-- Variants and other UI colors for Dark Mode (defined here for clarity) -->
+    <color name="dm_primary_variant">#D35454</color>
+    <color name="dm_primary_light">#FF8C8C</color>
+    <color name="dm_secondary_variant">#2C8E8A</color>
+    <color name="dm_secondary_light">#5BC6C1</color>
+    <color name="dm_surface">#2D3748</color>
+    <color name="dm_text_secondary">#A0AEC0</color>
+    <color name="dm_text_hint">#718096</color>
+    <color name="dm_error">#CF6679</color> <!-- Material Dark Error -->
+    <color name="dm_error_light">#B00020</color> <!-- Material Dark Error Variant -->
+    <color name="dm_success">#66BB6A</color> <!-- Dark theme friendly success -->
+
+    <!-- Standard colors -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent">#80000000</color>
+    <color name="selected_exercise_bg">#19FF6B6B</color> <!-- Very light primary color for selection -->
+
+    <!-- Light Theme UI Colors from Image -->
+    <color name="input_field_background_light">#F1F5F9</color> <!-- Light Slate Gray -->
+    <color name="button_primary_background_light">#1F2937</color> <!-- Dark Slate Gray -->
+    <color name="button_primary_text_light">@color/white</color>
+    <color name="button_social_background_light">@color/input_field_background_light</color>
+    <color name="button_social_text_light">#334155</color> <!-- Darker Slate Gray for social button text -->
+    <color name="text_link_light">#2563EB</color> <!-- Blue -->
+    <color name="text_title_light">#1E293B</color> <!-- Very Dark Slate Gray for screen titles -->
+    <color name="text_label_light">#475569</color> <!-- Slate Gray for field labels like "Username" -->
+    <color name="text_input_light">#1E293B</color> <!-- Color for text entered into input fields -->
+    <color name="text_placeholder_light">#94A3B8</color> <!-- Lighter Slate Gray for placeholder text -->
+    <color name="text_secondary_detail_light">#64748B</color> <!-- Slate Gray for "or use social account" -->
+    <color name="icon_tint_light">#64748B</color> <!-- Tint for icons in input fields -->
+    <color name="error_color_light">#DC2626</color> <!-- Red -->
+    
+    <!-- Social Login Colors -->
+    <color name="google_blue">#4285F4</color>
+    <color name="google_red">#EA4335</color>
+    <color name="google_yellow">#FBBC05</color>
+    <color name="google_green">#34A853</color>
+
+    <!-- Dark Theme UI Colors (counterparts to _light ones used by custom theme attributes) -->
+    <color name="input_field_background_dark">#2D3748</color> <!-- Based on dm_surface -->
+    <color name="button_social_background_dark">@color/input_field_background_dark</color>
+    <color name="button_social_text_dark">#E2E8F0</color> <!-- Based on dm_text_primary -->
+    <color name="text_label_dark">#A0AEC0</color> <!-- Based on dm_text_secondary -->
+    <color name="icon_tint_dark">#A0AEC0</color> <!-- Based on dm_text_secondary -->
+    <color name="text_title_dark">@color/dm_text_primary</color>
+    <color name="text_input_dark">@color/dm_text_primary</color>
+    <color name="text_placeholder_dark">@color/dm_text_hint</color>
+    <color name="text_secondary_detail_dark">@color/dm_text_secondary</color>
+    <color name="text_link_dark">#60A5FA</color> <!-- Lighter blue for dark theme -->
+    <color name="button_primary_background_dark">#E2E8F0</color> <!-- Light color for button on dark background -->
+    <color name="button_primary_text_dark">#1F2937</color> <!-- Dark text for light button -->
+    <color name="error_color_dark">@color/dm_error</color>
+
+    <!-- Compatibility Colors for AppTheme -->
+    <color name="colorPrimary">#1976D2</color>
+    <color name="colorPrimaryDark">#004BA0</color>
+    <color name="colorAccent">#FF4081</color>
+</resources>

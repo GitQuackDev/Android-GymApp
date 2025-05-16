@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme, which is customized in themes.xml -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Common attributes that can be used across the app -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!-- These styles have been moved to themes.xml to avoid duplication -->
+
+    <!-- Style for AimingFitness Dialog Titles -->
+    <style name="TextAppearance.AimingFitness.DialogTitle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Full screen dialog theme -->
+    <style name="Theme.AimingFitness.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <!-- Card styles for workouts and exercises -->
+    <style name="Widget.AimingFitness.Card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="contentPadding">16dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="android:layout_marginBottom">4dp</item>
+    </style>
+
+    <!-- Chip style for filter chips -->
+    <style name="Widget.AimingFitness.Chip.Filter" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipCornerRadius">16dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="chipMinHeight">32dp</item>
+    </style>
+
+    <!-- Chip style for action chips -->
+    <style name="Widget.AimingFitness.Chip.Action" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="chipCornerRadius">16dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="chipMinHeight">32dp</item>
+    </style>
+</resources>

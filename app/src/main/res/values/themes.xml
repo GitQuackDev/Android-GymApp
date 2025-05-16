@@ -1,0 +1,167 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <attr name="text_secondary" format="color" />
+    <attr name="text_hint" format="color" />
+
+    <!-- Declarations for custom attributes used in the theme -->
+    <attr name="text_label_color" format="color" />
+    <attr name="input_field_background_color" format="color" />
+    <attr name="button_social_background_color" format="color" />
+    <attr name="button_social_text_color" format="color" />
+    <attr name="icon_tint_color" format="color" />
+
+    <!-- Style for a full-width dialog -->
+    <style name="FullScreenDialog" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- Base application theme for light mode -->
+    <style name="Theme.AimingFitness" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/button_primary_background_light</item>
+        <item name="colorPrimaryVariant">@color/button_primary_background_light</item> <!-- Or a darker shade if you have one -->
+        <item name="colorOnPrimary">@color/button_primary_text_light</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/text_link_light</item> <!-- Using link color as secondary -->
+        <item name="colorSecondaryVariant">@color/text_link_light</item> <!-- Or a darker shade -->
+        <item name="colorOnSecondary">@color/white</item> <!-- Assuming white text on link color -->
+        <!-- Accent Color -->
+        <item name="colorAccent">@color/text_link_light</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item> <!-- Light status bar for light theme -->
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/white</item> <!-- Page background -->
+        <item name="colorSurface">@color/white</item> <!-- Card background -->
+        <item name="colorOnBackground">@color/text_title_light</item>
+        <item name="colorOnSurface">@color/text_title_light</item>
+        <!-- Text colors -->
+        <item name="android:textColorPrimary">@color/text_title_light</item>
+        <item name="android:textColorSecondary">@color/text_secondary_detail_light</item>
+        <item name="android:textColorHint">@color/text_placeholder_light</item>
+        <item name="colorError">@color/error_color_light</item>
+        <item name="colorOnError">@color/white</item>
+        <!-- Custom attributes for UI from image -->
+        <item name="text_label_color">@color/text_label_light</item>
+        <item name="input_field_background_color">@color/input_field_background_light</item>
+        <item name="button_social_background_color">@color/button_social_background_light</item>
+        <item name="button_social_text_color">@color/button_social_text_light</item>
+        <item name="icon_tint_color">@color/icon_tint_light</item>
+        <item name="text_secondary">@color/text_secondary_detail_light</item> <!-- Added missing attribute definitions for light theme -->
+        <item name="text_hint">@color/text_placeholder_light</item>
+        <!-- Shape styles -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AimingFitness.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.AimingFitness.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.AimingFitness.LargeComponent</item>
+    </style>
+
+    <!-- Text Appearances based on image -->
+    <style name="TextAppearance.AimingFitness.Title" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">@color/text_title_light</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="TextAppearance.AimingFitness.FieldLabel" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">?attr/text_label_color</item> <!-- Use custom attr -->
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.AimingFitness.InputText" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/text_input_light</item>
+    </style>
+
+    <style name="TextAppearance.AimingFitness.HintText" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/text_placeholder_light</item>
+    </style>
+
+    <style name="TextAppearance.AimingFitness.ButtonText" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="TextAppearance.AimingFitness.SocialButtonText" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textColor">?attr/button_social_text_color</item> <!-- Use custom attr -->
+    </style>
+
+    <style name="TextAppearance.AimingFitness.LinkText" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/text_link_light</item>
+    </style>
+
+    <style name="TextAppearance.AimingFitness.Subtitle" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@color/text_secondary_detail_light</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <!-- Widget Styles based on image -->
+    <style name="Widget.AimingFitness.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeWidth">0dp</item> <!-- Remove the outline -->
+        <item name="boxStrokeWidthFocused">0dp</item> <!-- Remove outline on focus -->
+        <item name="boxBackgroundColor">?attr/input_field_background_color</item> <!-- Use custom attr -->
+        <item name="hintTextColor">@color/text_placeholder_light</item>
+        <item name="android:textColorHint">@color/text_placeholder_light</item>
+        <item name="startIconTint">?attr/icon_tint_color</item>
+        <item name="endIconTint">?attr/icon_tint_color</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.AimingFitness.SmallComponent</item>
+    </style>
+
+    <style name="Widget.AimingFitness.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/button_primary_background_light</item>
+        <item name="android:textColor">@color/button_primary_text_light</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.AimingFitness.MediumComponent</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.AimingFitness.ButtonText</item>
+    </style>
+
+    <style name="Widget.AimingFitness.SocialButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:backgroundTint">?attr/button_social_background_color</item> <!-- Use custom attr -->
+        <item name="android:textColor">?attr/button_social_text_color</item> <!-- Use custom attr -->
+        <item name="strokeWidth">0dp</item> <!-- No border -->
+        <item name="shapeAppearance">@style/ShapeAppearance.AimingFitness.MediumComponent</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="iconTint">@null</item> <!-- Important for Google icon -->
+        <item name="android:textAppearance">@style/TextAppearance.AimingFitness.SocialButtonText</item>
+    </style>
+
+    <style name="Widget.AimingFitness.Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/text_secondary_detail_light</item>
+        <item name="android:textAppearance">@style/TextAppearance.AimingFitness.Subtitle</item>
+    </style>
+
+    <style name="Widget.AimingFitness.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">?attr/colorPrimary</item> <!-- Use primary color for the outline -->
+        <item name="android:textColor">?attr/colorPrimary</item> <!-- Use primary color for the text -->
+        <item name="shapeAppearance">@style/ShapeAppearance.AimingFitness.MediumComponent</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="iconTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.AimingFitness.Button.LinkButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/text_link_light</item>
+        <item name="android:textAppearance">@style/TextAppearance.AimingFitness.LinkText</item>
+    </style>
+
+    <!-- Shape Appearances -->
+    <style name="ShapeAppearance.AimingFitness.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item> <!-- Rounded corners for input fields -->
+    </style>
+
+    <style name="ShapeAppearance.AimingFitness.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item> <!-- Rounded corners for buttons -->
+    </style>
+
+    <style name="ShapeAppearance.AimingFitness.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+</resources>

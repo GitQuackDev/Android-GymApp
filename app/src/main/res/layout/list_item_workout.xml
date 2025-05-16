@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/workout_image_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_placeholder_workout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/workout_image_description" />
+
+        <TextView
+            android:id="@+id/workout_name_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            tools:text="Morning Workout"
+            app:layout_constraintStart_toEndOf="@id/workout_image_view"
+            app:layout_constraintTop_toTopOf="@id/workout_image_view"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/workout_tags_chip_group"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@id/workout_name_text_view"
+            app:layout_constraintTop_toBottomOf="@id/workout_name_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/workout_image_view"
+            app:chipSpacingHorizontal="4dp">
+
+            <!-- Chips will be added programmatically -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_tag_1"
+                style="@style/Widget.MaterialComponents.Chip.Entry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expert"
+                tools:visibility="visible"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_tag_2"
+                style="@style/Widget.MaterialComponents.Chip.Entry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30mins"
+                tools:visibility="visible"/>
+
+            <com.google.android.material.chip.Chip
+                 android:id="@+id/chip_tag_3"
+                 style="@style/Widget.MaterialComponents.Chip.Entry"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="Legs"
+                 tools:visibility="visible"/>
+        </com.google.android.material.chip.ChipGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
