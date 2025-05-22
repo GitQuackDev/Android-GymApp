@@ -54,10 +54,10 @@
                         android:layout_marginTop="4dp" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
-            <!-- Chart Section -->
+            
+            <!-- Exercise Progress Chart Section -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/cvChart"
+                android:id="@+id/cardExerciseChart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -74,27 +74,52 @@
                     android:padding="16dp">
                     
                     <TextView
-                        android:id="@+id/tvChartTitle"
+                        android:id="@+id/tvExerciseChartTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Body Weight"
+                        android:text="Exercise Progress"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_primary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
                     
-                    <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/progressChart"
+                    <Spinner
+                        android:id="@+id/spinnerExerciseFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="120dp"
+                        app:layout_constraintTop_toTopOf="@id/tvExerciseChartTitle"
+                        app:layout_constraintBottom_toBottomOf="@id/tvExerciseChartTitle"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                    
+                    <TextView
+                        android:id="@+id/tvNoExerciseData"
                         android:layout_width="match_parent"
-                        android:layout_height="220dp"
+                        android:layout_height="wrap_content"
+                        android:text="No exercise data yet. Complete some workouts!"
+                        android:textAlignment="center"
+                        android:padding="32dp"
+                        android:visibility="visible"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toBottomOf="@+id/spinnerExerciseFilter" 
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/exerciseBarChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
                         android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/tvChartTitle"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/spinnerExerciseFilter" 
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-              <!-- Daily Progress Section Title -->
+            
+            <!-- Daily Progress Section Title -->
             <TextView
                 android:id="@+id/tvDailyProgressTitle"
                 android:layout_width="wrap_content"
@@ -106,7 +131,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cvChart" />
+                app:layout_constraintTop_toBottomOf="@+id/cardExerciseChart" />
             
             <!-- Daily Progress Entries -->
             <androidx.recyclerview.widget.RecyclerView
@@ -178,43 +203,38 @@
                     android:id="@+id/ivEmptyStateProgress"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:src="@drawable/ic_empty_progress"
-                    app:tint="@color/primary" />
+                    android:src="@drawable/ic_empty_progress" 
+                    android:contentDescription="Empty state icon" />
 
                 <TextView
                     android:id="@+id/tvEmptyStateProgress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/no_progress_entries"
+                    android:text="No progress entries yet."
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                    android:textColor="@color/text_secondary" />
+                    android:layout_marginTop="16dp"/>
 
                 <TextView
                     android:id="@+id/tvEmptyStateProgressHint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/add_progress_to_get_started"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                    android:textColor="@color/text_hint" />
-
+                    android:text="Add your first progress entry to get started!"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                    android:layout_marginTop="8dp"/>
             </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddProgress"
+        android:id="@+id/fabAddProgress" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="@string/add_progress_entry_fab_description"
-        android:src="@drawable/ic_add"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/secondary"
         app:tint="@color/white"
-        app:elevation="6dp"
-        app:backgroundTint="#1E88E5" />
+        android:contentDescription="Add Progress Entry" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

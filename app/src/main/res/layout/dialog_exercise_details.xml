@@ -6,12 +6,32 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <TextView
+        android:id="@+id/tvExerciseTitle" 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Exercise Details" 
+        android:textSize="20sp"
+        android:textColor="@color/primary"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <ImageView
+        android:id="@+id/ivExerciseIconDialog"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_fitness_center" 
+        android:contentDescription="Exercise Icon" />
+        
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilSets"
         style="@style/Widget.AimingFitness.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Sets">
+        android:hint="Sets"
+        app:startIconDrawable="@drawable/ic_fitness_center">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSets"
             android:layout_width="match_parent"
@@ -25,21 +45,112 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:hint="Repetitions">
+        android:hint="Repetitions"
+        app:startIconDrawable="@drawable/ic_repeat">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etReps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number" />
+            android:inputType="text" /> 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilWeight"
+        style="@style/Widget.AimingFitness.TextInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="Weight (e.g., 50kg, Body Weight)"
+        app:startIconDrawable="@drawable/ic_weight">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rest Time Between Sets"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="8dp"/>
+            
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRest30s" 
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="30s"
+                android:layout_marginEnd="4dp"/>
+                
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRest60s" 
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="60s"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"/>
+                
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRest90s" 
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="90s"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"/> 
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRest120s" 
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="120s"
+                android:layout_marginStart="4dp"/>
+        </LinearLayout>
+        
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRestTime"
+            style="@style/Widget.AimingFitness.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Custom Rest Time (seconds)"
+            app:startIconDrawable="@drawable/ic_timer">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRestTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilNotes"
         style="@style/Widget.AimingFitness.TextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Notes (Optional)">
+        android:layout_marginTop="16dp"
+        android:hint="Notes (Optional)"
+        app:startIconDrawable="@drawable/ic_note">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNotes"
             android:layout_width="match_parent"

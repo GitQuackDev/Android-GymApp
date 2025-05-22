@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Workout chip style -->
+    <style name="Widget.AimingFitness.Chip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="android:textSize">9sp</item> 
+        <item name="chipMinHeight">20dp</item> 
+        <item name="chipCornerRadius">10dp</item> 
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="chipStartPadding">4dp</item>
+        <item name="chipEndPadding">4dp</item>
+        <item name="textStartPadding">1dp</item>
+        <item name="textEndPadding">1dp</item>
+        <item name="ensureMinTouchTargetSize">false</item>
+        <item name="rippleColor">@android:color/transparent</item>
+        <item name="chipStrokeWidth">0dp</item>
+    </style>
+    
+    <!-- Workout tag chip style - more subtle than the regular chip -->
+    <style name="Widget.AimingFitness.Chip.Tag" parent="Widget.AimingFitness.Chip">
+        <item name="chipBackgroundColor">@color/chip_tag_background</item>
+        <item name="android:textColor">@color/chip_tag_text</item>
+    </style>
+</resources>

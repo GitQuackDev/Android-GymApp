@@ -101,4 +101,13 @@ public class ExerciseLibraryViewModel extends ViewModel {
     public LiveData<String> getErrorMessage() {
         return exerciseRepository.getErrorMessage();
     }
+
+    /**
+     * Add a custom exercise to the repository.
+     */
+    public void addCustomExercise(ExerciseLibrary exercise) {
+        exerciseRepository.addExercise(exercise); // Assuming addExercise can handle custom ones
+        // Optionally, you might want to refresh the list or handle it in the observer
+        // loadExercises(); // Or let the LiveData update handle it if addExercise triggers it
+    }
 }

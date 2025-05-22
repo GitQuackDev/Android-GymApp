@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Chip sizes -->
+    <dimen name="chip_min_height">32dp</dimen>
+    <dimen name="chip_padding">8dp</dimen>
+    
+    <!-- Text sizes -->
+    <dimen name="text_headline">18sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    
+    <!-- Margins and padding -->    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_normal">8dp</dimen>
+    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="padding_normal">16dp</dimen>
+    <dimen name="spacing_small">4dp</dimen>
+</resources>

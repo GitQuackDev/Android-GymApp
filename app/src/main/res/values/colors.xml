@@ -87,4 +87,14 @@
     <color name="colorPrimary">#1976D2</color>
     <color name="colorPrimaryDark">#004BA0</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- Text Colors for Enhanced UI -->
+    
+    <!-- Enhanced Tag Colors -->
+    <color name="chip_tag_background">#F0F4F8</color>
+    <color name="chip_tag_text">#5A6B87</color>
+    
+    <!-- Chip Colors -->
+    <color name="chip_background_color">#F0F0F0</color>
+    <color name="chip_text_color">@color/black</color>
 </resources>

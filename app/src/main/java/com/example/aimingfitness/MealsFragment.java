@@ -1,30 +1,37 @@
 package com.example.aimingfitness;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MealsFragment extends Fragment {
+public class MealsFragment extends Fragment implements MealAdapter.OnMealItemClickListener {
 
     private static final String TAG = "MealsFragment";
 
     private RecyclerView rvMeals;
     private MealAdapter mealAdapter;
     private List<Meal> mealList;
-    private FirebaseFirestore db;
+    private MealViewModel mealViewModel;
+    private FloatingActionButton fabAddMeal;
+    private ProgressBar progressLoading;
+    private TextView tvNoMeals;
 
     public MealsFragment() {
         // Required empty public constructor
@@ -36,52 +43,104 @@ public class MealsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_meals, container, false);
 
+        // Initialize views
         rvMeals = view.findViewById(R.id.rvMeals);
-        rvMeals.setLayoutManager(new LinearLayoutManager(getContext()));
+        fabAddMeal = view.findViewById(R.id.fabAddMeal);
+        progressLoading = view.findViewById(R.id.progressLoading);
+        tvNoMeals = view.findViewById(R.id.tvNoMeals);
 
+        // Set up RecyclerView
+        rvMeals.setLayoutManager(new LinearLayoutManager(getContext()));
         mealList = new ArrayList<>();
-        mealAdapter = new MealAdapter(getContext(), mealList);
+        mealAdapter = new MealAdapter(getContext(), mealList, this);
         rvMeals.setAdapter(mealAdapter);
 
-        // Initialize Firestore
-        db = FirebaseFirestore.getInstance();
+        // Initialize ViewModel
+        mealViewModel = new ViewModelProvider(this).get(MealViewModel.class);
+        
+        // Observe changes to the meals list
+        mealViewModel.getMealsLiveData().observe(getViewLifecycleOwner(), meals -> {
+            mealList.clear();
+            if (meals != null && !meals.isEmpty()) {
+                mealList.addAll(meals);
+                tvNoMeals.setVisibility(View.GONE);
+                rvMeals.setVisibility(View.VISIBLE);
+            } else {
+                tvNoMeals.setVisibility(View.VISIBLE);
+                rvMeals.setVisibility(View.GONE);
+            }
+            mealAdapter.notifyDataSetChanged();
+        });
 
-        fetchMealsFromFirestore();
+        // Observe loading state
+        mealViewModel.getIsLoadingLiveData().observe(getViewLifecycleOwner(), isLoading -> {
+            progressLoading.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        });
+
+        // Observe error messages
+        mealViewModel.getErrorMessageLiveData().observe(getViewLifecycleOwner(), errorMsg -> {
+            if (errorMsg != null && !errorMsg.isEmpty()) {
+                Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Set up FAB click listener
+        fabAddMeal.setOnClickListener(v -> {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                // Launch AddMealActivity
+                Intent intent = new Intent(getActivity(), AddMealActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), "Please sign in to add meals", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Load meals from Firestore
+        loadMeals();
 
         return view;
     }
 
-    private void fetchMealsFromFirestore() {
-        String currentUserId = null;
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        } else {
-            Log.w(TAG, "User not authenticated. Cannot fetch meals.");
-            mealList.clear();
-            mealAdapter.notifyDataSetChanged();
-            // Optionally, show a message to the user
-            Toast.makeText(getContext(), "Please sign in to view meals.", Toast.LENGTH_LONG).show();
-            return;
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Refresh meals list when returning to this fragment
+        loadMeals();
+    }
 
-        db.collection("meals")
-                .whereEqualTo("userId", currentUserId) // Filter by userId
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        mealList.clear(); 
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Meal meal = document.toObject(Meal.class);
-                            meal.setMealId(document.getId()); 
-                            mealList.add(meal);
-                            Log.d(TAG, document.getId() + " => " + document.getData());
-                        }
-                        mealAdapter.notifyDataSetChanged(); 
-                    } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
-                        // Handle the error, e.g., show a toast message
-                        Toast.makeText(getContext(), "Error fetching meals: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+    private void loadMeals() {
+        if (mealViewModel != null) {
+            mealViewModel.loadMeals();
+        }
+    }
+
+    @Override
+    public void onMealClick(Meal meal, int position) {
+        // Open meal details activity/dialog
+        Intent intent = new Intent(getActivity(), MealDetailActivity.class);
+        intent.putExtra("MEAL_ID", meal.getMealId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onEditClick(Meal meal, int position) {
+        // Open edit meal activity
+        Intent intent = new Intent(getActivity(), AddMealActivity.class);
+        intent.putExtra("MEAL_ID", meal.getMealId());
+        intent.putExtra("IS_EDIT", true);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDeleteClick(Meal meal, int position) {
+        // Show confirmation dialog before deleting
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Delete Meal")
+                .setMessage("Are you sure you want to delete this meal?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    mealViewModel.deleteMeal(meal.getMealId());
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 }

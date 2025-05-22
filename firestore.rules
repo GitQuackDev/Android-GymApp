@@ -1,0 +1,76 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // IMPORTANT: For rules using isOwner() or isCreatingOwner(),
+    // your Firestore documents (e.g., in workouts, dailyProgress, meals, workoutHistory)
+    // MUST contain a field named 'userId' that stores the UID of the user who owns the document.
+
+    match /exercises/{exerciseId} {
+      // Current rule allows any authenticated user to read and write (create, update, delete).
+      // Consider if write access should be more restrictive (e.g., only admins or creators).
+      // If exercises are user-specific, they should also use isOwner()/isCreatingOwner()
+      // and have a 'userId' field.
+      allow read, write: if request.auth != null;
+    }
+
+    function isOwner() {
+      return request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    function isCreatingOwner() {
+      // For create operations, request.resource.data refers to the document to be created.
+      return request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /workouts/{workoutId} {
+      allow read, update, delete: if isOwner();
+      allow create: if isCreatingOwner();
+      allow list: if request.auth != null; // Users can list workouts, client-side queries should filter by userId if needed.
+    }
+
+    match /dailyProgress/{progressId} {
+      allow read, update, delete: if isOwner();
+      allow create: if isCreatingOwner();
+      allow list: if request.auth != null;
+    }
+
+    match /meals/{mealId} {
+      allow read, update, delete: if isOwner();
+      allow create: if isCreatingOwner();
+      allow list: if request.auth != null;
+    }
+
+    match /progress/{docUserId}/entries/{entryId} {
+      // Here, docUserId from the path is used for authorization.
+      // The isOwner() and isCreatingOwner() functions (if used as they are)
+      // would additionally check for a 'userId' field within the 'entry' document.
+      // This is fine if intended, providing an extra layer of check.
+      allow read, update, delete: if request.auth != null && request.auth.uid == docUserId && isOwner();
+      allow create: if request.auth != null && request.auth.uid == docUserId && isCreatingOwner();
+      allow list: if request.auth != null && request.auth.uid == docUserId;
+    }
+
+    // Added rule for workoutHistory
+    // This assumes that documents in 'workoutHistory' will have a 'userId' field
+    // that matches the authenticated user's UID.
+    match /workoutHistory/{historyId} {
+      allow read, update, delete: if isOwner();
+      allow create: if isCreatingOwner();
+      allow list: if request.auth != null; // Users can list history, client-side queries should filter.
+    }
+  }
+}
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /workout_images/{allPaths=**} {
+      allow read; // Anyone can read any workout image.
+    }
+    match /workout_images/{userId}/{imagePath=**} {
+      // Users can only write to their own folder in workout_images.
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

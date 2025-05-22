@@ -13,6 +13,7 @@ public class MealActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MealAdapter mealAdapter;
     private List<Meal> mealList;
+    private MealAdapter.OnMealItemClickListener mealItemClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +29,26 @@ public class MealActivity extends AppCompatActivity {
         // mealList.add(new Meal("Breakfast Burrito", "Eggs, cheese, salsa, tortilla", 350));
         // mealList.add(new Meal("Chicken Salad", "Chicken, lettuce, tomatoes, dressing", 450));
 
-        // Pass context (this) to the MealAdapter constructor
-        mealAdapter = new MealAdapter(this, mealList);
+        // Initialize the listener
+        mealItemClickListener = new MealAdapter.OnMealItemClickListener() {
+            @Override
+            public void onMealClick(Meal meal, int position) {
+                // Handle meal click
+            }
+
+            @Override
+            public void onEditClick(Meal meal, int position) {
+                // Handle edit click
+            }
+
+            @Override
+            public void onDeleteClick(Meal meal, int position) {
+                // Handle delete click
+            }
+        };
+
+        // Pass context (this), mealList, and listener to the MealAdapter constructor
+        mealAdapter = new MealAdapter(this, mealList, mealItemClickListener);
         recyclerView.setAdapter(mealAdapter);
     }
 

@@ -14,16 +14,15 @@ public class Workout implements Serializable {
     private String difficulty; // e.g., Beginner, Intermediate, Advanced
     private String muscleGroups; // Comma-separated or a List<String>
     private List<ExerciseDetail> exercises; // Changed from String to List<ExerciseDetail>
-    // Add a field for an image if you plan to display images for workouts
-    // private String imageUrl;
+    private String imageUrl; // Added for workout image
 
     // Constructors
     public Workout() {
         // Default constructor required for calls to DataSnapshot.getValue(Workout.class) if using Firebase
     }
 
-    // Updated constructor to accept List<ExerciseDetail>
-    public Workout(String id, String userId, String name, String description, String type, String duration, String difficulty, String muscleGroups, List<ExerciseDetail> exercises) {
+    // Updated constructor to accept List<ExerciseDetail> and imageUrl
+    public Workout(String id, String userId, String name, String description, String type, String duration, String difficulty, String muscleGroups, List<ExerciseDetail> exercises, String imageUrl) {
         this.id = id;
         this.userId = userId; // Initialize userId
         this.name = name;
@@ -33,6 +32,7 @@ public class Workout implements Serializable {
         this.difficulty = difficulty;
         this.muscleGroups = muscleGroups;
         this.exercises = exercises;
+        this.imageUrl = imageUrl; // Initialize imageUrl
     }
 
     // Getters and Setters
@@ -110,6 +110,14 @@ public class Workout implements Serializable {
         this.exercises = exercises;
     }
 
+    public String getImageUrl() { // Added getter for imageUrl
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) { // Added setter for imageUrl
+        this.imageUrl = imageUrl;
+    }
+
     // toString() might be useful for debugging
     @Override
     public String toString() {
@@ -123,6 +131,7 @@ public class Workout implements Serializable {
                 ", difficulty='" + difficulty + '\'' +
                 ", muscleGroups='" + muscleGroups + '\'' +
                 ", exercises=" + (exercises != null ? exercises.toString() : "null") +
+                ", imageUrl='" + imageUrl + '\'' + // Added imageUrl to toString
                 '}';
     }
 }

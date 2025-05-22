@@ -95,9 +95,11 @@ public class ProgressAdapter extends RecyclerView.Adapter<ProgressAdapter.Progre
         return progressList.size();
     }
 
-    public void updateProgress(List<ProgressEntry> newProgressList) {
+    public void updateEntries(List<ProgressEntry> newProgressList) {
         this.progressList.clear();
-        this.progressList.addAll(newProgressList);
+        if (newProgressList != null) { // Add null check for safety
+            this.progressList.addAll(newProgressList);
+        }
         notifyDataSetChanged(); // Consider using DiffUtil for better performance
     }
 

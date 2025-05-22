@@ -6,21 +6,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.PopupMenu;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
-
-// TODO: Consider using a library like Glide or Picasso for image loading from URLs
 
 public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder> {
 
     private List<Meal> mealList;
     private Context context;
-
-    public MealAdapter(Context context, List<Meal> mealList) {
+    private OnMealItemClickListener listener;
+    
+    // Interface for meal item interactions
+    public interface OnMealItemClickListener {
+        void onMealClick(Meal meal, int position);
+        void onEditClick(Meal meal, int position);
+        void onDeleteClick(Meal meal, int position);
+    }
+    public MealAdapter(Context context, List<Meal> mealList, OnMealItemClickListener listener) {
         this.context = context;
         this.mealList = mealList != null ? mealList : new ArrayList<>();
+        this.listener = listener;
     }
 
     @NonNull
@@ -28,9 +39,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
     public MealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_meal, parent, false);
         return new MealViewHolder(view);
-    }
-
-    @Override
+    }    @Override
     public void onBindViewHolder(@NonNull MealViewHolder holder, int position) {
         Meal meal = mealList.get(position);
         holder.tvMealName.setText(meal.getName());
@@ -41,10 +50,52 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
         holder.tvCarbs.setText(String.format("C: %.0fg", meal.getCarbs()));     // Set carbs
         holder.tvFats.setText(String.format("F: %.0fg", meal.getFats()));       // Set fats
 
-        // For now, using a placeholder. Later, load image from meal.getImageUrl()
-        // using a library like Glide or Picasso.
-        // e.g., Glide.with(context).load(meal.getImageUrl()).placeholder(R.drawable.ic_placeholder_meal).into(holder.ivMealImage);
-        holder.ivMealImage.setImageResource(R.drawable.ic_placeholder_meal);
+        // Load image using Glide if available, otherwise use placeholder
+        if (meal.getImageUrl() != null && !meal.getImageUrl().isEmpty()) {
+            Glide.with(context)
+                .load(meal.getImageUrl())
+                .apply(new RequestOptions()
+                    .placeholder(R.drawable.ic_placeholder_meal)
+                    .error(R.drawable.ic_placeholder_meal))
+                .into(holder.ivMealImage);
+        } else {
+            holder.ivMealImage.setImageResource(R.drawable.ic_placeholder_meal);
+        }
+        
+        // Set item click listener
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onMealClick(meal, position);
+            }
+        });
+        
+        // Add options menu (3 dots)
+        holder.ivMoreOptions.setOnClickListener(v -> {
+            if (listener != null) {
+                showPopupMenu(holder.ivMoreOptions, meal, position);
+            }
+        });
+    }
+    
+    private void showPopupMenu(View view, Meal meal, int position) {
+        PopupMenu popup = new PopupMenu(context, view);
+        popup.inflate(R.menu.meal_item_menu);
+        popup.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.action_edit_meal) {
+                if (listener != null) {
+                    listener.onEditClick(meal, position);
+                }
+                return true;
+            } else if (itemId == R.id.action_delete_meal) {
+                if (listener != null) {
+                    listener.onDeleteClick(meal, position);
+                }
+                return true;
+            }
+            return false;
+        });
+        popup.show();
     }
 
     @Override
@@ -58,28 +109,28 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.MealViewHolder
             this.mealList.addAll(newMeals);
         }
         notifyDataSetChanged(); // Consider using DiffUtil for better performance
-    }
-
-    static class MealViewHolder extends RecyclerView.ViewHolder {
+    }    static class MealViewHolder extends RecyclerView.ViewHolder {
         ImageView ivMealImage;
+        ImageView ivMoreOptions;
         TextView tvMealName;
-        TextView tvMealDescription; // Added
+        TextView tvMealDescription;
         TextView tvMealCalories;
         TextView tvMealType;
-        TextView tvProtein;         // Added
-        TextView tvCarbs;           // Added
-        TextView tvFats;            // Added
+        TextView tvProtein;
+        TextView tvCarbs;
+        TextView tvFats;
 
         public MealViewHolder(@NonNull View itemView) {
             super(itemView);
             ivMealImage = itemView.findViewById(R.id.ivMealImage);
+            ivMoreOptions = itemView.findViewById(R.id.ivMoreOptions);
             tvMealName = itemView.findViewById(R.id.tvMealName);
-            tvMealDescription = itemView.findViewById(R.id.tvMealDescription); // Added
+            tvMealDescription = itemView.findViewById(R.id.tvMealDescription);
             tvMealCalories = itemView.findViewById(R.id.tvMealCalories);
             tvMealType = itemView.findViewById(R.id.tvMealType);
-            tvProtein = itemView.findViewById(R.id.tvProtein);                 // Added
-            tvCarbs = itemView.findViewById(R.id.tvCarbs);                   // Added
-            tvFats = itemView.findViewById(R.id.tvFats);                     // Added
+            tvProtein = itemView.findViewById(R.id.tvProtein);
+            tvCarbs = itemView.findViewById(R.id.tvCarbs);
+            tvFats = itemView.findViewById(R.id.tvFats);
         }
     }
 }

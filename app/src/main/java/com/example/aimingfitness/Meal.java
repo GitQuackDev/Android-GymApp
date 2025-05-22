@@ -20,8 +20,8 @@ public class Meal {
     // Required empty public constructor for Firestore deserialization
     public Meal() {}
 
-    public Meal(String userId, String name, String description, String imageUrl, double calories, double protein, double carbs, double fats, List<String> ingredients, String recipe, String mealType) { // Added userId to constructor
-        this.userId = userId; // Initialize userId
+    public Meal(String userId, String name, String description, String imageUrl, double calories, double protein, double carbs, double fats, List<String> ingredients, String recipe, String mealType) {
+        this.userId = userId;
         this.name = name;
         this.description = description;
         this.imageUrl = imageUrl;
@@ -36,7 +36,7 @@ public class Meal {
 
     // Getters
     public String getMealId() { return mealId; }
-    public String getUserId() { return userId; } // Added getter for userId
+    public String getUserId() { return userId; }
     public String getName() { return name; }
     public String getDescription() { return description; }
     public String getImageUrl() { return imageUrl; }

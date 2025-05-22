@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,6 +49,7 @@ public class WorkoutSummaryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.workout_complete);
         }
         
         // Initialize views
@@ -73,6 +75,22 @@ public class WorkoutSummaryActivity extends AppCompatActivity {
             if (completedExercises == null) {
                 completedExercises = new ArrayList<>();
             }
+            
+            // Verify data integrity and use defaults if needed
+            if (totalExercises == 0 && completedExercises != null) {
+                totalExercises = completedExercises.size();
+            }
+            
+            if (totalSets == 0 && completedExercises != null) {
+                // Calculate total sets if not provided
+                for (ExerciseDetail exercise : completedExercises) {
+                    totalSets += exercise.getSets();
+                }
+            }
+            
+            if (duration == null || duration.isEmpty()) {
+                duration = "Unknown";
+            }
         }
         
         // Update UI with workout data
@@ -95,7 +113,8 @@ public class WorkoutSummaryActivity extends AppCompatActivity {
         adapter = new WorkoutExerciseAdapter(this, completedExercises, true);
         rvCompletedExercises.setAdapter(adapter);
     }
-      private void saveWorkoutProgress() {
+    
+    private void saveWorkoutProgress() {
         // Get current user
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
@@ -113,6 +132,23 @@ public class WorkoutSummaryActivity extends AppCompatActivity {
         workoutHistory.put("duration", duration);
         workoutHistory.put("date", new Date());
         
+        // Add the exercises list to the workout history document
+        List<Map<String, Object>> exercisesList = new ArrayList<>();
+        for (ExerciseDetail exercise : completedExercises) {
+            Map<String, Object> exerciseMap = new HashMap<>();
+            exerciseMap.put("id", exercise.getId());
+            exerciseMap.put("name", exercise.getName());
+            exerciseMap.put("sets", exercise.getSets());
+            exerciseMap.put("reps", exercise.getReps());
+            exerciseMap.put("weight", exercise.getWeight());
+            exerciseMap.put("notes", exercise.getNotes());
+            exerciseMap.put("restTimeSeconds", exercise.getRestTimeSeconds());
+            exerciseMap.put("warmUp", exercise.isWarmUp());
+            
+            exercisesList.add(exerciseMap);
+        }
+        workoutHistory.put("exercises", exercisesList);
+        
         // Get Firestore instance
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         
@@ -122,6 +158,9 @@ public class WorkoutSummaryActivity extends AppCompatActivity {
             .addOnSuccessListener(documentReference -> {
                 Toast.makeText(this, "Workout progress saved successfully!", Toast.LENGTH_SHORT).show();
                 
+                // Save each exercise as a ProgressEntry to integrate with the progress tracking system
+                saveWorkoutToProgressSystem(currentUser.getUid());
+                
                 // Disable button after saving
                 findViewById(R.id.btnSaveWorkoutProgress).setEnabled(false);
                 ((MaterialButton)findViewById(R.id.btnSaveWorkoutProgress)).setText("Progress Saved");
@@ -129,6 +168,58 @@ public class WorkoutSummaryActivity extends AppCompatActivity {
             .addOnFailureListener(e -> {
                 Toast.makeText(this, "Error saving workout progress: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             });
+    }
+    
+    /**
+     * Saves each exercise from the workout to the progress system for tracking
+     */
+    private void saveWorkoutToProgressSystem(String userId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Date currentDate = new Date();
+        
+        for (ExerciseDetail exercise : completedExercises) {
+            // Skip if exercise doesn't have weight data
+            if (exercise.getWeight() == null || exercise.getWeight().isEmpty() || 
+                exercise.getWeight().equalsIgnoreCase("bodyweight")) {
+                continue;
+            }
+            
+            // Try to parse weight to a numeric value
+            double weightValue;
+            try {
+                String weightStr = exercise.getWeight().replaceAll("[^\\d.]", "");
+                weightValue = Double.parseDouble(weightStr);
+            } catch (NumberFormatException e) {
+                // Skip if weight is not parseable
+                continue;
+            }
+            
+            // Create a ProgressEntry for this exercise
+            ProgressEntry entry = new ProgressEntry();
+            entry.setUserId(userId);
+            entry.setDate(new Timestamp(currentDate));
+            entry.setType("Workout Log");
+            entry.setValue(weightValue);
+            entry.setUnit(exercise.getWeight().contains("kg") ? "kg" : "lbs");
+            entry.setExerciseName(exercise.getName());
+            entry.setSets(exercise.getSets());
+            
+            // Try to parse reps
+            try {
+                entry.setReps(Integer.parseInt(exercise.getReps()));
+            } catch (NumberFormatException e) {
+                entry.setReps(0); // Default if reps is not a simple number
+            }
+            
+            entry.setNotes("From workout: " + workoutName);
+            
+            // Save to Firestore progress collection
+            db.collection("progress")
+                .add(entry)
+                .addOnFailureListener(e -> {
+                    // Silent failure - we've already shown success for the overall workout
+                });
+        }
     }
     
     private void shareWorkoutResults() {
@@ -167,7 +258,8 @@ public class WorkoutSummaryActivity extends AppCompatActivity {
         shareIntent.putExtra(Intent.EXTRA_TEXT, workoutSummary.toString());
         startActivity(Intent.createChooser(shareIntent, "Share workout via"));
     }
-      private void finishWorkout() {
+    
+    private void finishWorkout() {
         // Return to home page/workouts fragment
         Intent intent = new Intent(this, HomePageActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

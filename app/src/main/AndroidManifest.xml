@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".MainApplication"
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -16,6 +16,16 @@
         android:theme="@style/Theme.AimingFitness"
         android:enableOnBackInvokedCallback="true"
         tools:targetApi="31">
+        
+        <!-- Meta-data for Google Play Services version -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+            
+        <!-- Firebase App Check debug token - remove for production -->
+        <meta-data
+            android:name="firebase_app_check_debug_token"
+            android:value="BAAAA0F6-0000-0000-0000-000000000000" />
 
         <activity
             android:name=".SplashActivity"
@@ -68,6 +78,18 @@
             android:name=".WorkoutSummaryActivity"
             android:exported="false"
             android:parentActivityName=".WorkoutSessionActivity"
+            android:theme="@style/Theme.AimingFitness" />
+
+        <activity
+            android:name=".AddMealActivity"
+            android:exported="false"
+            android:parentActivityName=".HomePageActivity"
+            android:theme="@style/Theme.AimingFitness" />
+
+        <activity
+            android:name=".MealDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".HomePageActivity"
             android:theme="@style/Theme.AimingFitness" />
 
     </application>

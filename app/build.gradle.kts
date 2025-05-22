@@ -30,6 +30,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        // Enable core library desugaring
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -42,6 +44,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar.jdk.libs) // Make sure this line is present and correct
 
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -50,16 +53,25 @@ dependencies {
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.lifecycle.livedata)
     
-    // Google Authentication for Gmail Login
+    // Google Play Services
+    implementation(libs.play.services.base)
+    implementation(libs.play.services.tasks)
     implementation(libs.google.auth)
 
     // Firebase SDKs
-    implementation(platform(libs.firebase.bom)) // Add Firebase Bill of Materials
-    implementation(libs.firebase.auth.ktx)       // For Firebase Authentication
-    implementation(libs.firebase.firestore.ktx)  // For Firebase Firestore (database)
+    implementation(platform(libs.firebase.bom)) // Firebase Bill of Materials
+    implementation(libs.firebase.auth.ktx)      // Firebase Authentication
+    implementation(libs.firebase.firestore.ktx) // Firebase Firestore (database)
+    implementation(libs.firebase.storage.ktx)   // Firebase Storage
+    implementation(libs.firebase.appcheck.debug) // Firebase App Check Debug
+    implementation(libs.firebase.analytics)     // Firebase Analytics - helps with tracking issues
 
     // MPAndroidChart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // Glide for image loading
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

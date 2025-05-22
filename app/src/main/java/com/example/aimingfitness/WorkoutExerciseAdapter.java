@@ -100,6 +100,15 @@ public class WorkoutExerciseAdapter extends RecyclerView.Adapter<WorkoutExercise
         this.currentExerciseIndex = currentExerciseIndex;
     }
 
+    /**
+     * Mark the exercise at the given index as completed by updating the currentExerciseIndex
+     * and refreshing the adapter.
+     */
+    public void markExerciseCompleted(int index) {
+        setCurrentExerciseIndex(index + 1); // Move to next exercise
+        notifyDataSetChanged();
+    }
+
     static class ExerciseViewHolder extends RecyclerView.ViewHolder {
         TextView tvExerciseName;
         TextView tvExerciseDetails;

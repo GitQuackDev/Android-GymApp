@@ -28,8 +28,8 @@ public class WorkoutsFragment extends Fragment implements WorkoutAdapter.Workout
     private WorkoutAdapter workoutAdapter;
     private List<Workout> workoutList;
     private FirebaseFirestore db;
-    private FloatingActionButton fabAddWorkoutFragment; // Added FAB variable
-    private View emptyStateView; // Added for empty state
+    private FloatingActionButton fabAddWorkoutFragment;
+    private View emptyStateView;
 
     public WorkoutsFragment() {
         // Required empty public constructor
@@ -39,32 +39,29 @@ public class WorkoutsFragment extends Fragment implements WorkoutAdapter.Workout
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView called");
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_workouts, container, false);
         Log.d(TAG, "Layout inflated: " + (view != null));
 
         rvWorkouts = view.findViewById(R.id.rvWorkouts);
-        fabAddWorkoutFragment = view.findViewById(R.id.fabAddWorkoutFragment); // Initialize FAB
-        emptyStateView = view.findViewById(R.id.emptyStateViewWorkouts); // Initialize empty state view
+        fabAddWorkoutFragment = view.findViewById(R.id.fabAddWorkoutFragment);
+        emptyStateView = view.findViewById(R.id.emptyStateViewWorkouts);
 
         Log.d(TAG, "RecyclerView found: " + (rvWorkouts != null));
-        Log.d(TAG, "FAB found: " + (fabAddWorkoutFragment != null)); // Log FAB initialization
+        Log.d(TAG, "FAB found: " + (fabAddWorkoutFragment != null));
         Log.d(TAG, "EmptyStateView found: " + (emptyStateView != null));
 
         rvWorkouts.setLayoutManager(new LinearLayoutManager(getContext()));
         workoutList = new ArrayList<>();
-        // Pass 'this' as the WorkoutActionListener to the adapter
+        // This initial adapter will be replaced by fetchWorkoutsFromFirestore or its content updated
         workoutAdapter = new WorkoutAdapter(getContext(), workoutList, this, this);
         rvWorkouts.setAdapter(workoutAdapter);
         Log.d(TAG, "Adapter set on RecyclerView");
 
-        // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Set OnClickListener for the FAB
         if (fabAddWorkoutFragment != null) {
             fabAddWorkoutFragment.setOnClickListener(v -> {
-                Log.d(TAG, "fabAddWorkoutFragment clicked"); // Log FAB click
+                Log.d(TAG, "fabAddWorkoutFragment clicked");
                 Intent intent = new Intent(getActivity(), AddWorkoutActivity.class);
                 startActivity(intent);
             });
@@ -78,15 +75,16 @@ public class WorkoutsFragment extends Fragment implements WorkoutAdapter.Workout
     }
 
     private void fetchWorkoutsFromFirestore() {
-        Log.d(TAG, "fetchWorkoutsFromFirestore called"); // Added logging
+        Log.d(TAG, "fetchWorkoutsFromFirestore called");
         String currentUserId = null;
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            Log.d(TAG, "Current User ID: " + currentUserId); // Added logging
+            Log.d(TAG, "Current User ID: " + currentUserId);
         } else {
             Log.w(TAG, "User not authenticated. Cannot fetch workouts.");
-            workoutList.clear();
-            workoutAdapter.updateWorkouts(new ArrayList<>()); // Pass a new list to clear
+            this.workoutList.clear();
+            this.workoutAdapter = new WorkoutAdapter(getContext(), this.workoutList, WorkoutsFragment.this, WorkoutsFragment.this);
+            rvWorkouts.setAdapter(this.workoutAdapter);
             updateEmptyStateVisibility();
             Toast.makeText(getContext(), "Please sign in to view workouts.", Toast.LENGTH_LONG).show();
             return;
@@ -98,43 +96,37 @@ public class WorkoutsFragment extends Fragment implements WorkoutAdapter.Workout
                 .get()
                 .addOnSuccessListener(task -> {
                     Log.d(TAG, "Successfully fetched " + task.size() + " workout documents (with userId filter: " + finalCurrentUserId + ").");
-                    for (QueryDocumentSnapshot document : task) {
-                        Log.d(TAG, "Document ID: " + document.getId() + ", userId: " + document.getString("userId") + ", Data: " + document.getData());
-                    }
                     List<Workout> fetchedWorkouts = new ArrayList<>();
                     for (QueryDocumentSnapshot document : task) {
-                        Log.d(TAG, "Raw workout data from Firestore: " + document.getData());
+                        Log.d(TAG, "Document ID: " + document.getId() + ", userId: " + document.getString("userId") + ", Data: " + document.getData());
                         Workout workout = document.toObject(Workout.class);
                         if (workout != null) {
                             workout.setId(document.getId());
-                            // Ensure exercises list is initialized if it's null from Firestore
                             if (workout.getExercises() == null) {
                                 workout.setExercises(new ArrayList<>());
                             }
                             fetchedWorkouts.add(workout);
-                            Log.d(TAG, "Parsed workout: " + workout.getName() + ", ID: " + workout.getId() + ", Exercises: " + workout.getExercises().size());
+                            Log.d(TAG, "Parsed workout: " + workout.getName() + ", ID: " + workout.getId() + ", Exercises: " + workout.getExercises().size() + ", ImageUrl: " + workout.getImageUrl());
                         } else {
                             Log.w(TAG, "Failed to parse workout document: " + document.getId());
                         }
                     }
-                    // Recreate adapter with fresh list to ensure items display
-                    rvWorkouts.setAdapter(new WorkoutAdapter(getContext(), fetchedWorkouts, WorkoutsFragment.this, WorkoutsFragment.this));
-                    int count = fetchedWorkouts.size();
-                    Log.d(TAG, "Total workouts fetched: " + count);
-                    // Show/hide empty state based on fetched list
-                    if (count == 0) {
-                        emptyStateView.setVisibility(View.VISIBLE);
-                        rvWorkouts.setVisibility(View.GONE);
-                    } else {
-                        emptyStateView.setVisibility(View.GONE);
-                        rvWorkouts.setVisibility(View.VISIBLE);
-                    }
+                    
+                    this.workoutList.clear();
+                    this.workoutList.addAll(fetchedWorkouts);
+                    this.workoutAdapter = new WorkoutAdapter(getContext(), this.workoutList, WorkoutsFragment.this, WorkoutsFragment.this);
+                    rvWorkouts.setAdapter(this.workoutAdapter);
+                    updateEmptyStateVisibility(); // Uses this.workoutList
+
+                    Log.d(TAG, "Total workouts processed: " + this.workoutList.size());
+
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Error getting documents.", e);
                     Toast.makeText(getContext(), "Error fetching workouts: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    workoutList.clear();
-                    workoutAdapter.updateWorkouts(new ArrayList<>());
+                    this.workoutList.clear();
+                    this.workoutAdapter = new WorkoutAdapter(getContext(), this.workoutList, WorkoutsFragment.this, WorkoutsFragment.this);
+                    rvWorkouts.setAdapter(this.workoutAdapter);
                     updateEmptyStateVisibility();
                 });
     }
@@ -146,7 +138,7 @@ public class WorkoutsFragment extends Fragment implements WorkoutAdapter.Workout
                 emptyStateView.setVisibility(View.VISIBLE);
                 rvWorkouts.setVisibility(View.GONE);
             } else {
-                Log.d(TAG, "Workout list has items, showing recycler view.");
+                Log.d(TAG, "Workout list has items (" + workoutList.size() + "), showing recycler view.");
                 emptyStateView.setVisibility(View.GONE);
                 rvWorkouts.setVisibility(View.VISIBLE);
             }
@@ -159,7 +151,7 @@ public class WorkoutsFragment extends Fragment implements WorkoutAdapter.Workout
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume called, refreshing workouts.");
-        if (db != null) {
+        if (db != null) { // db might be null if onCreateView hasn't completed fully or failed
             fetchWorkoutsFromFirestore();
         }
     }
@@ -190,21 +182,12 @@ public class WorkoutsFragment extends Fragment implements WorkoutAdapter.Workout
         db.collection("workouts").document(workout.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Workout successfully deleted: " + workout.getName());
+                    Log.d(TAG, "Workout successfully deleted from Firestore: " + workout.getName());
                     Toast.makeText(getContext(), "Workout '" + workout.getName() + "' deleted.", Toast.LENGTH_SHORT).show();
-                    // No need to call fetchWorkoutsFromFirestore() if adapter is updated directly
-                    int removedPosition = workoutList.indexOf(workout);
-                    if (removedPosition != -1) {
-                        workoutList.remove(removedPosition);
-                        workoutAdapter.notifyItemRemoved(removedPosition);
-                        workoutAdapter.notifyItemRangeChanged(removedPosition, workoutList.size());
-                        updateEmptyStateVisibility(); // Update empty state if needed
-                    } else {
-                        fetchWorkoutsFromFirestore(); // Fallback if item not found in list
-                    }
+                    fetchWorkoutsFromFirestore(); // Refresh the list from Firestore
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error deleting workout", e);
+                    Log.e(TAG, "Error deleting workout from Firestore", e);
                     Toast.makeText(getContext(), "Error deleting workout: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
@@ -217,7 +200,6 @@ public class WorkoutsFragment extends Fragment implements WorkoutAdapter.Workout
         startActivity(intent);
     }
 
-    // This method is from WorkoutAdapter.WorkoutItemClickListener
     @Override
     public void onWorkoutItemClick(Workout workout) {
         startWorkoutSession(workout);

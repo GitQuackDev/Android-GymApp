@@ -1,10 +1,13 @@
 package com.example.aimingfitness;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable; 
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log; 
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable; 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +23,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource; 
+import com.bumptech.glide.load.engine.GlideException; 
+import com.bumptech.glide.request.RequestListener; 
+import com.bumptech.glide.request.target.Target; 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -33,13 +42,14 @@ import java.util.Locale;
 public class WorkoutSessionActivity extends AppCompatActivity implements WorkoutExerciseAdapter.OnExerciseClickListener {
 
     private static final String TAG = "WorkoutSessionActivity";
-    private static final int DEFAULT_REST_TIME = 60; // Default rest time in seconds if none specified
+    private static final int DEFAULT_REST_TIME_SECONDS = 60; 
 
     private Workout workout;
     private List<ExerciseDetail> exerciseDetails = new ArrayList<>();
     
-    // UI Components
+    
     private CollapsingToolbarLayout collapsingToolbar;
+    private ImageView ivWorkoutHeader; 
     private TextView tvTotalExercises;
     private TextView tvEstimatedTime;
     private TextView tvDifficulty;
@@ -57,7 +67,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
     private ExtendedFloatingActionButton fabNextExercise;
     private RecyclerView rvExerciseList;
     private WorkoutExerciseAdapter exerciseAdapter;
-      // State variables
+      
     private int currentExerciseIndex = 0;
     private int currentSetNumber = 1;
     private boolean isRestPhase = false;
@@ -65,7 +75,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
     private boolean isTimerPaused = false;
     private long timeRemaining = 0;
     
-    // Workout tracking
+    
     private long workoutStartTime;
     private int totalCompletedSets = 0;
 
@@ -74,7 +84,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_session);
 
-        // Get the workout from intent
+        
         if (getIntent() != null) {
             workout = (Workout) getIntent().getSerializableExtra("workout");
         }
@@ -85,10 +95,10 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
             return;
         }
         
-        // Initialize UI components
+        
         initializeUI();
         
-        // Set up toolbar and action bar
+        
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -96,15 +106,37 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         
-        // Set workout info
+        
         collapsingToolbar.setTitle(workout.getName());
-          // Set workout stats
+
+        
+        Log.d(TAG, "WorkoutSessionActivity: imageUrl=" + workout.getImageUrl());
+        if (workout.getImageUrl() != null && !workout.getImageUrl().isEmpty()) {
+            try {
+                Uri imageUri = Uri.parse(workout.getImageUrl());
+                Glide.with(this)
+                     .load(imageUri)
+                     .placeholder(R.drawable.ic_placeholder_workout)
+                     .error(R.drawable.ic_placeholder_workout)
+                     .centerCrop()
+                     .into(ivWorkoutHeader);
+            } catch (Exception e) {
+                Log.e(TAG, "WorkoutSessionActivity: Failed to load image URI: " + workout.getImageUrl(), e);
+                Toast.makeText(this, "Workout image not found. Please re-select the image.", Toast.LENGTH_LONG).show();
+                ivWorkoutHeader.setImageResource(R.drawable.ic_placeholder_workout);
+            }
+        } else {
+            Toast.makeText(this, "No workout image set. Please edit the workout and select an image.", Toast.LENGTH_LONG).show();
+            ivWorkoutHeader.setImageResource(R.drawable.ic_placeholder_workout);
+        }
+
+          
         exerciseDetails = workout.getExercises();
         if (exerciseDetails == null) {
             exerciseDetails = new ArrayList<>();
         }
         
-        // Start tracking workout time
+        
         workoutStartTime = System.currentTimeMillis();
         
         int totalExercises = exerciseDetails.size();
@@ -112,33 +144,33 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         tvEstimatedTime.setText(workout.getDuration());
         tvDifficulty.setText(workout.getDifficulty());
         
-        // Set up exercise adapter
+        
         exerciseAdapter = new WorkoutExerciseAdapter(this, exerciseDetails, this);
         rvExerciseList.setAdapter(exerciseAdapter);
         
-        // Start with the first exercise if available
+        
         if (!exerciseDetails.isEmpty()) {
             updateCurrentExerciseDisplay();
         } else {
-            // Handle case where there are no exercises
+            
             showNoExercisesMessage();
         }
 
-        // Set up FAB click listener
+        
         fabNextExercise.setOnClickListener(v -> {
             if (isRestPhase) {
-                // If we're in rest phase, cancel it and move to the next exercise or set
+                
                 if (restTimer != null) {
                     restTimer.cancel();
                 }
                 completeRestPeriod();
             } else {
-                // If we're not in rest phase, complete the current set
+                
                 completeCurrentSet();
             }
         });
 
-        // Skip timer button
+        
         btnSkipTimer.setOnClickListener(v -> {
             if (restTimer != null) {
                 restTimer.cancel();
@@ -146,15 +178,15 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
             completeRestPeriod();
         });
 
-        // Pause/resume timer button
+        
         btnPauseTimer.setOnClickListener(v -> {
             if (isTimerPaused) {
-                // Resume timer
+                
                 startRestTimer(timeRemaining);
                 btnPauseTimer.setText(R.string.pause);
                 isTimerPaused = false;
             } else {
-                // Pause timer
+                
                 if (restTimer != null) {
                     restTimer.cancel();
                 }
@@ -166,6 +198,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
 
     private void initializeUI() {
         collapsingToolbar = findViewById(R.id.collapsingToolbar);
+        ivWorkoutHeader = findViewById(R.id.ivWorkoutHeader); 
         tvTotalExercises = findViewById(R.id.tvTotalExercises);
         tvEstimatedTime = findViewById(R.id.tvEstimatedTime);
         tvDifficulty = findViewById(R.id.tvDifficulty);
@@ -185,7 +218,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         
         rvExerciseList.setLayoutManager(new LinearLayoutManager(this));
         
-        // Initially hide the timer card until needed
+        
         cardTimer.setVisibility(View.GONE);
     }
 
@@ -197,7 +230,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         ExerciseDetail exercise = exerciseDetails.get(currentExerciseIndex);
         tvCurrentExerciseName.setText(exercise.getName());
         
-        // Set description/notes if available, otherwise hide it
+        
         if (exercise.getNotes() != null && !exercise.getNotes().isEmpty()) {
             tvCurrentExerciseDescription.setText(exercise.getNotes());
             tvCurrentExerciseDescription.setVisibility(View.VISIBLE);
@@ -205,14 +238,14 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
             tvCurrentExerciseDescription.setVisibility(View.GONE);
         }
         
-        // Set current set progress
+        
         String setProgress = String.format(Locale.getDefault(), "%d / %d", currentSetNumber, exercise.getSets());
         tvCurrentSetProgress.setText(setProgress);
         
-        // Set reps
+        
         tvCurrentReps.setText(exercise.getReps());
         
-        // Set weight if available
+        
         if (exercise.getWeight() != null && !exercise.getWeight().isEmpty()) {
             tvCurrentWeight.setText(exercise.getWeight());
             llWeight.setVisibility(View.VISIBLE);
@@ -220,11 +253,11 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
             llWeight.setVisibility(View.GONE);
         }
         
-        // Update adapter to highlight current exercise
+        
         exerciseAdapter.setCurrentExerciseIndex(currentExerciseIndex);
         exerciseAdapter.notifyDataSetChanged();
         
-        // Update FAB text
+        
         if (isRestPhase) {
             fabNextExercise.setText(R.string.skip);
             fabNextExercise.setIconResource(R.drawable.ic_check);
@@ -235,7 +268,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
     }
 
     private void showNoExercisesMessage() {
-        // Hide exercise-specific UI
+        
         tvCurrentExerciseName.setText(R.string.no_exercises_found);
         tvCurrentExerciseDescription.setVisibility(View.GONE);
         tvCurrentSetProgress.setText("0 / 0");
@@ -243,64 +276,71 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         llWeight.setVisibility(View.GONE);
         fabNextExercise.setVisibility(View.GONE);
     }    private void completeCurrentSet() {
-        ExerciseDetail currentExercise = exerciseDetails.get(currentExerciseIndex);
-        
-        // Track completed sets
         totalCompletedSets++;
-        
-        if (currentSetNumber < currentExercise.getSets()) {
-            // If there are more sets for this exercise, start rest period
-            currentSetNumber++;
-            startRestPeriod(currentExercise.getRestTimeSeconds());
-        } else {
-            // If this was the last set, move to the next exercise
-            currentSetNumber = 1;
-            currentExerciseIndex++;
+        currentSetNumber++;
+        ExerciseDetail currentExercise = exerciseDetails.get(currentExerciseIndex);
+
+        if (currentSetNumber > currentExercise.getSets()) {
             
-            // Check if there are more exercises
+            
+            exerciseAdapter.markExerciseCompleted(currentExerciseIndex);
+            
+            currentExerciseIndex++; 
+            currentSetNumber = 1; 
+
             if (currentExerciseIndex < exerciseDetails.size()) {
-                // Start rest period before next exercise
+                
                 ExerciseDetail nextExercise = exerciseDetails.get(currentExerciseIndex);
-                startRestPeriod(nextExercise.isWarmUp() ? 30 : 60); // Less rest if it's a warmup
+                int restTimeForNext = nextExercise.getRestTimeSeconds() > 0 ? nextExercise.getRestTimeSeconds() : DEFAULT_REST_TIME_SECONDS;
+                startRestTimer(restTimeForNext * 1000L);
+                updateCurrentExerciseDisplay(); 
             } else {
-                // Workout completed
-                showWorkoutCompleteDialog();
-                return;
+                
+                finishWorkout();
             }
+        } else {
+            
+            int restTimeForCurrent = currentExercise.getRestTimeSeconds() > 0 ? currentExercise.getRestTimeSeconds() : DEFAULT_REST_TIME_SECONDS;
+            startRestTimer(restTimeForCurrent * 1000L);
+            updateCurrentExerciseDisplay(); 
         }
-        
-        updateCurrentExerciseDisplay();
     }
 
     private void startRestPeriod(int seconds) {
         isRestPhase = true;
         if (seconds <= 0) {
-            seconds = DEFAULT_REST_TIME;
+            seconds = DEFAULT_REST_TIME_SECONDS;
         }
         
-        // Show the timer card
-        cardTimer.setVisibility(View.VISIBLE);
-        startRestTimer(seconds * 1000L); // Convert to milliseconds
         
-        // Update FAB
+        cardTimer.setVisibility(View.VISIBLE);
+        startRestTimer(seconds * 1000L); 
+        
+        
         fabNextExercise.setText(R.string.skip);
         
-        // Update adapter
+        
         exerciseAdapter.notifyDataSetChanged();
     }
 
-    private void startRestTimer(long milliseconds) {
-        if (restTimer != null) {
-            restTimer.cancel();
-        }
-        
-        restTimer = new CountDownTimer(milliseconds, 1000) {
+    private void startRestTimer(long millisInFuture) {
+        cardTimer.setVisibility(View.VISIBLE);
+        tvTimerLabel.setText("REST");
+        fabNextExercise.setText(R.string.skip_rest);
+        isRestPhase = true;
+        isTimerPaused = false;
+        btnPauseTimer.setText(R.string.pause);
+        btnPauseTimer.setVisibility(View.VISIBLE);
+        btnSkipTimer.setVisibility(View.VISIBLE);
+
+        restTimer = new CountDownTimer(millisInFuture, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeRemaining = millisUntilFinished;
-                updateTimerDisplay(millisUntilFinished);
+                tvTimer.setText(String.format(Locale.getDefault(), "%02d:%02d",
+                        (millisUntilFinished / 1000) / 60, (millisUntilFinished / 1000) % 60));
             }
-            
+
             @Override
             public void onFinish() {
                 completeRestPeriod();
@@ -308,41 +348,34 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         }.start();
     }
 
-    private void updateTimerDisplay(long millisUntilFinished) {
-        int seconds = (int) (millisUntilFinished / 1000);
-        int minutes = seconds / 60;
-        seconds = seconds % 60;
-        
-        tvTimer.setText(String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds));
-    }
-
     private void completeRestPeriod() {
         isRestPhase = false;
         cardTimer.setVisibility(View.GONE);
+        fabNextExercise.setText(R.string.next_set_exercise);
+        btnPauseTimer.setVisibility(View.GONE);
+        btnSkipTimer.setVisibility(View.GONE);
+
         
-        // Reset pause state
-        isTimerPaused = false;
-        btnPauseTimer.setText(R.string.pause);
-        
-        // Update FAB
-        fabNextExercise.setText(R.string.complete_set);
-        
-        updateCurrentExerciseDisplay();
+        if (currentExerciseIndex >= exerciseDetails.size()) {
+            finishWorkout();
+            return;
+        }
+        updateCurrentExerciseDisplay(); 
     }    private void showWorkoutCompleteDialog() {
-        // Calculate workout duration
+        
         long workoutEndTime = System.currentTimeMillis();
         long workoutDurationMs = workoutEndTime - workoutStartTime;
         String formattedDuration = formatDuration(workoutDurationMs);
         
-        // Calculate total reps (if available as numbers)
+        
         int totalReps = 0;
         for (ExerciseDetail exercise : exerciseDetails) {
             try {
-                // Try to parse reps if it's a numeric value
+                
                 int reps = Integer.parseInt(exercise.getReps());
                 totalReps += reps * exercise.getSets();
             } catch (NumberFormatException e) {
-                // Skip if reps is not a simple number (e.g., "8-12" or "AMRAP")
+                
             }
         }
         
@@ -361,7 +394,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton(R.string.view_summary, (dialog, which) -> {
-                    // Launch workout summary activity
+                    
                     Intent intent = new Intent(this, WorkoutSummaryActivity.class);
                     intent.putExtra("WORKOUT_ID", workout.getId());
                     intent.putExtra("WORKOUT_NAME", workout.getName());
@@ -378,6 +411,17 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
                 .show();
     }
 
+    /**
+     * Called when the workout is finished. Navigates to the summary screen.
+     */    private void finishWorkout() {
+        
+        long workoutEndTime = System.currentTimeMillis();
+        long workoutDurationMs = workoutEndTime - workoutStartTime;
+        String formattedDuration = formatDuration(workoutDurationMs);
+        
+        showWorkoutCompleteDialog();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -389,7 +433,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
 
     @Override
     public void onBackPressed() {
-        // Ask for confirmation if workout is in progress
+        
         if (!exerciseDetails.isEmpty() && currentExerciseIndex < exerciseDetails.size()) {
             new AlertDialog.Builder(this)
                     .setTitle("Quit Workout?")
@@ -410,7 +454,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
         }
     }    @Override
     public void onExerciseClick(ExerciseDetail exercise, int position) {
-        // If user clicks on an exercise in the list, jump to that exercise
+        
         if (position != currentExerciseIndex) {
             new AlertDialog.Builder(this)
                     .setTitle("Jump to Exercise")
