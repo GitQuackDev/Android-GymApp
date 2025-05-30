@@ -284,8 +284,7 @@ public class ExerciseLibrary {
             "Get in a push-up position but rest on your forearms, hold your body in a straight line from head to heels.",
             "planks_image"
         ));
-        
-        // Cardio exercises
+          // Cardio exercises
         exercises.add(new ExerciseLibrary(
             "running", 
             "Running", 
@@ -304,6 +303,16 @@ public class ExerciseLibrary {
             Arrays.asList("Stationary Bike"), 
             "Pedal on a stationary bike at various resistance levels and speeds.",
             "cycling_image"
+        ));
+        
+        exercises.add(new ExerciseLibrary(
+            "mountain_climbers", 
+            "Mountain Climbers", 
+            "Cardio", 
+            Arrays.asList("Abs", "Shoulders"), 
+            Arrays.asList(), 
+            "Start in a plank position, alternately bring your knees to your chest in a running motion while keeping your hands planted.",
+            "mountain_climbers_image"
         ));
         
         return exercises;

@@ -401,7 +401,7 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
                     intent.putExtra("TOTAL_EXERCISES", exerciseDetails.size());
                     intent.putExtra("TOTAL_SETS", totalCompletedSets);
                     intent.putExtra("DURATION", formattedDuration);
-                    intent.putExtra("COMPLETED_EXERCISES", new ArrayList<>(exerciseDetails));
+                    intent.putExtra("COMPLETED_EXERCISE S", new ArrayList<>(exerciseDetails));
                     startActivity(intent);
                     finish();
                 })
@@ -475,9 +475,8 @@ public class WorkoutSessionActivity extends AppCompatActivity implements Workout
     }
     
     /**
-     * Formats milliseconds to a human-readable duration (mm:ss or hh:mm:ss)
-     * @param durationMs Duration in milliseconds
-     * @return Formatted duration string
+     * @param durationMs
+     * @return
      */
     private String formatDuration(long durationMs) {
         long seconds = durationMs / 1000;
